@@ -29,7 +29,7 @@ differential information of the program outputs as obtained using automated diff
 
 The evolution of a **differentiable genetic program** can be supported by using the information on the derivatives of the program outputs with respect to chosen parameters, enabling in GP the equivalent of back-propagation in Artificial Neural Networks (ANN). The fitness of a program can thus be defined also in terms of its derivatives, allowing to go beyond symbolic regression tasks and, for example, to solve differential equations, learn differential models, capture conserved quantities in dynamical systems, search for Lyapunov functions in controlled systems, etc..
 
-In this work we introduce the C++ library `dcgp` and the Python package `dcgpy`, tools we developed to allow research into the applications enabled by **differentiable genetic programming**. In the rest of this paper, we will refer to both using the name `dcgp`, except if excplicitly mentioned.
+In this work we introduce the C++ library `dcgp` and the Python package `dcgpy`, tools we developed to allow research into the applications enabled by **differentiable genetic programming**. In the rest of this paper, we will refer mainly to `dcgp`, with the understanding that the a corresponding behaviour can always be also obtained in `dcgpy`.
 
 # Methods 
 
@@ -44,27 +44,27 @@ defines entirely the value of the terminal nodes and thus the computer program.
 
 Several *kernels* are already available in `dcgp`, but the user has also the ability to define his own ones both in the C++ and in the Python version.
 
-In `dcgp` the CGP representations of programs are all derived from a base templated class `dcgp::expression<T>`. The use of the
-templated parameter `T` allows to compute, using different types, the nodes of the acyclic graph defining the computer program, and thus its outputs. In particular, the use of **generalized dual numbers**, implemented in the library `audi` [@audi:2020], are enabled and 
+In `dcgp` the CGP representations of programs are all derived from a base C++ templated class `dcgp::expression<T>`. The use of the
+template parameter `T` allows to compute the nodes of the acyclic graph defining the computer program, and thus its outputs, using different types. In particular, the use of **generalized dual numbers**, implemented in the library `audi` [@audi:2020], are enabled and 
 can be used to obtain the derivatives of the program outputs with respect to parameters present in its encoding. **Generalized dual numbers** 
 implement the algebra of truncated Taylor polynomials and act, in this context, as a high order, forward mode, automated differentiation method.
 
 The two classes `dcgp::expression_weighted<T>` and `dcgp::expression_ann` derive from the base class `dcgp::expression<T>` and offer
 new, extended, kinds of CGP representations. `dcgp::expression_weighted<T>` adds a weight to each node connection and thus creates a program rich in floating point constants to be learned. `dcgp::expression_ann` adds also a bias, thus making it possible to represent generic artificial neural networks. Since forward mode automated differentiation is highly unefficient whenever a high number of parameters are to be learned (a typical situation when training ANN weights and biases), ```dcgp::expression_ann``` is only allowed to operate on the type ```double```. Its weights and biases can be learned using backward mode automated differentiation (back propagation) and a stochastic gradient descent algorithm implemented specifically for the class.
 
-All computer programs represented in `dcgp` can be *mutated* via the corresponding methods of the ```dcgp::expression<T>``` base class, and thus evolved. Mutations can be chosen selectively to affect only specific part of the chromosome, e.g. the *kernels* type, the connections or the output nodes. The different consequences of such mutations are visualized, in the case of a `dcgp::expression_ann`, in \autoref{fig:ann_mut}.
+All computer programs represented in `dcgp` can be *mutated* via the corresponding methods of the ```dcgp::expression<T>``` base class, and thus evolved. Mutations can be chosen selectively to affect only specific part of the chromosome, thus affecting only the *kernels*, the connections or the output nodes. The different consequences of such mutations are visualized, in the case of a `dcgp::expression_ann`, in \autoref{fig:ann_mut}.
 
 ![Effects of mutations on a dCGPANN.\label{fig:ann_mut}](ann_mut.png)
 
-In the case of using a `dcgp::expression<T>` for a symbolic regression task, `dcgp` and `dcgpy` include 
-several evolutionary startegies [@schwefel:1993], **memetic** and **multiobjective**, as well as a dedicated
-`dcgp::symbolic_regression` class that represents such problems as an optimization problems.
+When using a `dcgp::expression<T>` for a symbolic regression task, `dcgp` includes also
+several novel evolutionary startegies [@schwefel:1993], **memetic** and **multiobjective**, as well as a dedicated
+`dcgp::symbolic_regression` class that represents such problems as an optimization problem.
 
 # Notes on efficiency
 
-The process of evolving some CGP can be lengthy and, being subject to a degree of randomness, is typically repeated a few times 
-to peek at the diversity of possible evolved solutions. As a consequence, CPU efficiency is an enabler to build a successful learning pipeline. In `dcgp` there are several parallelization levels that can be exploited for this purpose. To start with, the program loss with respect to its expected output, can be parallelized when computed on multiple points. A second layer of parallelization is offered by `audi` [@audi:2020] when **generalized dual numbers** are employed. In this case, the underlying truncated Taylor polynomial algebra makes use of fine grained parallelization. A third layer is also present in the non **memetic** optimization algorithms shipped with `dcgp` as they can evaluate the fitness of the various individuals in parallel using a batch fitness evaluator. All the resulting nested parallelism is dealt with using the threading building blocks library.
-In the Python version `dcgpy` things are more complicated as multi-threading is not permitted and the multi-process parallelization paradigm
+The process of evolving a CGP can be lengthy and, being subject to a degree of randomness, is typically repeated a few times 
+to peek at the diversity of possible evolved solutions. As a consequence, CPU efficiency is an enabler to build a successful learning pipeline. In the C++ library `dcgp` there are several parallelization levels that can be exploited for this purpose. To start with, the program loss with respect to its expected output, can be parallelized when computed on multiple points. A second layer of parallelization is offered by `audi` [@audi:2020] when **generalized dual numbers** are employed. In this case, the underlying truncated Taylor polynomial algebra makes use of fine grained parallelization. A third layer is also present in the non **memetic** optimization algorithms shipped with `dcgp` as they can evaluate the fitness of the various individuals in parallel using a batch fitness evaluator. All the resulting nested parallelism is dealt with using the threading building blocks library.
+In the Python package `dcgpy` things are more complicated as multi-threading is not permitted and the multi-process parallelization paradigm
 is highly unefficient for fine grained parallelization. As a consequence, most of the implemented parallelization are unavailable. 
 The use of coarse-grained parallelization paradigms such as the island model for evolutionary algorithms is thus suggested to achieve
 the best out of `dcgp` computational times.
@@ -89,15 +89,13 @@ print("Numerical output: ", ex([1.2]))
 print("Symbolic output: ", ex(["x"]))
 ```
 and produce the output:
-
-```bash
+```
 Numerical output:  [1.7]
 Symbolic output:  ['((x/(x+x))+x)']
 Numerical output:  [1.68]
 Symbolic output:  ['((x*(x+x))-x)']
-
-```
-while in C++ the same would be achieved by: 
+``` 
+while in C++ a typical use of the `dcgp` library achieving a similar result would look like: 
 ```c++
 #include <dcgp.hpp>
 int main() {
