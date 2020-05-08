@@ -47,7 +47,7 @@ program to be computed on different types. This structure allows, on one hand, t
 
 All computer programs can be *mutated* calling the corresponding methods og the ```dcgp::expression<T>``` class.
 
-# Examples
+# C++ and Python APIs
 
 A typical use of the package, would look like:
 ```python
@@ -55,6 +55,9 @@ import dcgpy
 ks = dcgpy.kernel_set_double(["sum", "diff", "div", "mul"])
 ex = dcgpy.expression_double(inputs = 1, outputs = 1, rows = 1, 
                 cols = 6, levels_back = 6, arity  = 2, kernels = ks())
+print("Numerical output: ", ex([1.2]))
+print("Symbolic output: ", ex(["x"]))
+
 ```
 
 ```c++
@@ -62,13 +65,10 @@ using namespace dcgp;
 int main() {
     kernel_set<double> ks({"sum", "diff", "div", "mul"});
     expression<double> ex(1u, 1u, 1u, 6u, 6u, 2u, ks());
-
+    std::cout << "Numerical output: ", ex({1.2})) << "\n";
+    std::cout << "Symbolic output: ", ex({"x"})) << "\n";
 ```
-## Symbolic Regression
 
-## Artificial Neural Networks
-
-## Others
 
 # Acknowledgments
 
