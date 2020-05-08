@@ -51,13 +51,20 @@ implementing the algebra of truncated Taylor polynomials (essentially a high ord
 The two classes `dcgp::expression_weighted<T>` and `dcgp::expression_ann` derive from the base class `dcgp::expression<T>` and offer
 new, extended, kinds of CGP representations. `dcgp::expression_weighted<T>` adds a weight to each node connection and thus creates a program rich in floating point constants to be learned.  `dcgp::expression_ann` adds also a bias thus making it possible to obtain for the resulting program to represent generic artificial neural networks. Since forward mode automated differentiation is highly unefficient when a high number of parameters are to be learned (a typical situation when training ANN weights and biases), ```dcgp::expression_ann``` only operates on the type ```double``` and its weights and biases are learned using backward mode automated differentiation (back propagation) and a stochastic gradient descent implemented specifically for the class.
 
-All computer programs represented by a form of CGP can be *mutated* calling the corresponding methods of the ```dcgp::expression<T>``` base class, and thus evolved. In the case of use of a `dcgp::expression<T>` in a symbolic regression task, several evolutionary startegies,
-memetic and multiobjective, are provided in the library.
+All computer programs represented by a form of CGP can be *mutated* calling the corresponding methods of the ```dcgp::expression<T>``` base class, and thus evolved. Mutations can be chosen selectively to affect the *kernels*, the connections or the output nodes. The different 
+consequences of such mutations are visualized, in the case of a `dcgp::expression_ann`, in \autoref{fig:ann_mut}.
 
-![A classical CGP.\label{fig:ann_mut}](ann_mut.png)
+![Effects of mutations on a dCGPANN.\label{fig:ann_mut}](ann_mut.png)
 
+In the case of using a `dcgp::expression<T>` for a symbolic regression task, `dcgp` and `dcgpy` include 
+several evolutionary startegies, memetic and multiobjective, as well as a dedicated `dcgp::symbolic_regression` class
+that represent such tasks as an optimization problems.
 
 # Notes on efficiency (and parallel strategies implemented)
+
+It is of great importance to be able to evolve as many generations as possible in the shortest possible time. 
+
+
 
 # C++ and Python APIs
 
