@@ -54,7 +54,15 @@ A typical use of the package, would look like:
 import dcgpy
 ks = dcgpy.kernel_set_double(["sum", "diff", "div", "mul"])
 ex = dcgpy.expression_double(inputs = 1, outputs = 1, rows = 1, 
-                cols = 6, levels_back = 6, kernels = ks())
+                cols = 6, levels_back = 6, arity  = 2, kernels = ks())
+```
+
+```c++
+using namespace dcgp;
+int main() {
+    kernel_set<double> ks({"sum", "diff", "div", "mul"});
+    expression<double> ex(1u, 1u, 1u, 6u, 6u, 2u, ks());
+
 ```
 ## Symbolic Regression
 
