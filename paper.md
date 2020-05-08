@@ -42,14 +42,13 @@ defines entirely the value of the terminal nodes and thus the computer program.
 
 ![A classical CGP.\label{fig:cgp}](cgp.png)
 
-In `dcgp` the CGP representations are all derived from the basis templated class `dcgp::expression<T>`. The use of the
-templated parameter `T` allows to compute using different types the nodes of the acyclic graph defining the computer program.
-In particular, the use of generalized dual numbers, as implemented in the library `audi` [@audi:2020], allow to obtain
-derivatives of the program outputs with respect to parameters present in the program encoding by 
-implementing the algebra of truncated Taylor polynomials (essentially a high order, forward mode, automated differentiation method).
+In `dcgp` the CGP representations are all derived from a base templated class `dcgp::expression<T>`. The use of the
+templated parameter `T` allows to compute, using different types, the nodes of the acyclic graph defining the computer program, and thus its outputs. In particular, the use of **generalized dual numbers**, implemented in the library `audi` [@audi:2020], are enabled and 
+can be used to obtain the derivatives of the program outputs with respect to parameters present in its encoding. **Generalized dual numbers** 
+implement the algebra of truncated Taylor polynomials and act, in this context, as a high order, forward mode, automated differentiation method.
 
 The two classes `dcgp::expression_weighted<T>` and `dcgp::expression_ann` derive from the base class `dcgp::expression<T>` and offer
-new, extended, kinds of CGP representations. `dcgp::expression_weighted<T>` adds a weight to each node connection and thus creates a program rich in floating point constants to be learned.  `dcgp::expression_ann` adds also a bias thus making it possible to obtain for the resulting program to represent generic artificial neural networks. Since forward mode automated differentiation is highly unefficient when a high number of parameters are to be learned (a typical situation when training ANN weights and biases), ```dcgp::expression_ann``` only operates on the type ```double``` and its weights and biases are learned using backward mode automated differentiation (back propagation) and a stochastic gradient descent implemented specifically for the class.
+new, extended, kinds of CGP representations. `dcgp::expression_weighted<T>` adds a weight to each node connection and thus creates a program rich in floating point constants to be learned. `dcgp::expression_ann` adds also a bias, thus making it possible to represent generic artificial neural networks. Since forward mode automated differentiation is highly unefficient whenever a high number of parameters are to be learned (a typical situation when training ANN weights and biases), ```dcgp::expression_ann``` is only allowed to operate on the type ```double```, but its weights and biases can be learned using backward mode automated differentiation (back propagation) and a stochastic gradient descent implemented specifically for the class.
 
 All computer programs represented by a form of CGP can be *mutated* calling the corresponding methods of the ```dcgp::expression<T>``` base class, and thus evolved. Mutations can be chosen selectively to affect the *kernels*, the connections or the output nodes. The different 
 consequences of such mutations are visualized, in the case of a `dcgp::expression_ann`, in \autoref{fig:ann_mut}.
@@ -62,8 +61,8 @@ that represent such tasks as an optimization problems.
 
 # Notes on efficiency (and parallel strategies implemented)
 
-It is of great importance to be able to evolve as many generations as possible in the shortest possible time. 
-
+The efficiency of a Genetic Programming code is measured in its ability to evolve in a short time
+good solutions
 
 
 # C++ and Python APIs
