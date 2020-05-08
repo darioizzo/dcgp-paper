@@ -23,11 +23,12 @@ bibliography: paper.bib
 
 # Summary
 
-Genetic Programming (GP), is a computer technique based on the idea of representing computer programs as some sort of tree (data-structure) and
-evolving it using genetic algorithms, as to improve the programs *fitness* at solving a predefined task. The idea flourished in the late 80s mainly thanks to the work of John Koza [@koza:2017], and has always had a major *skeleton in the closet* (to use the words of Koza): the difficulty to find and evolve real valued parameters in the expressed programs. The recent development called **differentiable
-genetic programming** [@izzo:2017], was introduced to address exactly this issue and allows to learn constants in computer programs using the
-differential information of the loss associated to the program as obtained using automated differentiation techniques. 
+Genetic Programming (GP), is a computer technique based on the idea of representing a computer program as some sort of tree (data-structure) and evolving it using genetic algorithms as to improve its *fitness* at solving a predefined task. The idea flourished in the late 80s mainly thanks to the work of John Koza [@koza:2017], and (using the words of Koza) has always had a major *skeleton in the closet*: the difficulty to find and evolve real valued parameters in the expressed program. A recent development called **differentiable
+genetic programming** [@izzo:2017], was introduced to address exactly this issue by allowing to learn constants in computer programs using the
+differential information of the program outputs as obtained using automated differentiation techniques. 
 
 The evolution of a **differentiable genetic program** can be supported by using the information on the derivatives of the program outputs with respect to chosen parameters, enabling in GP the equivalent of back-propagation in Artificial Neural Networks (ANN). The fitness of a program can thus be defined in terms of the derivatives, allowing to go beyond symbolic regression tasks and, for example, to solve differential equations, learn differential models, capture conserved quantities in dynamical systems, search for Lyapunov functions in controlled systems, etc..
+
+In this work we introduce the C++ library **dcgp** exposed in the Python package **dcgpy**, a tool that allows research into the applications enabled by **differentiable genetic programming**.
 
 # References
