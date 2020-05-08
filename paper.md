@@ -61,12 +61,11 @@ that represent such tasks as an optimization problems.
 # Notes on efficiency (and parallel strategies implemented)
 
 The process of evolving some CGP can be lengthy and, being subject to a degree of randomness, is typically repeated a few times 
-to peek at the diversity of possible evolved solutions. As a consequence, CPU efficiency is an enabler to build a successful learning pipeline. In `dcgp` there are several parallelization levels that can be exploited for this purpose. To start with, the program loss with respect to its expected output, can be parallelized when computed on multiple points. A second layer of parallelization is offered by `audi` [@audi:2020] when **generalized dual numbers** are employed. In this case, the underlying truncated Taylor polynomial algebra makes use of fine grained parallelization. A third layer is also present in the non **memetic** optimization algorithms that can evaluate the fitness of the various individuals in parallel using a batch fitness evaluator. All the resulting nested parallelism is dealt with using the threading building blocks library.
+to peek at the diversity of possible evolved solutions. As a consequence, CPU efficiency is an enabler to build a successful learning pipeline. In `dcgp` there are several parallelization levels that can be exploited for this purpose. To start with, the program loss with respect to its expected output, can be parallelized when computed on multiple points. A second layer of parallelization is offered by `audi` [@audi:2020] when **generalized dual numbers** are employed. In this case, the underlying truncated Taylor polynomial algebra makes use of fine grained parallelization. A third layer is also present in the non **memetic** optimization algorithms shipped with `dcgp` as they can evaluate the fitness of the various individuals in parallel using a batch fitness evaluator. All the resulting nested parallelism is dealt with using the threading building blocks library.
 In the Python version `dcgpy` things are more complicated as multi-threading is not permitted and the multi-process parallelization paradigm
 is highly unefficient for fine grained parallelization. As a consequence, most of the implemented parallelization are unavailable. 
-The use of coarse-grained parallelization pardaigms such as the island model for evolutionary algorithms is thus suggested to achieve
-decent computational times.
-
+The use of coarse-grained parallelization paradigms such as the island model for evolutionary algorithms is thus suggested to achieve
+the best out of `dcgp` computational times.
 
 # C++ and Python APIs
 
