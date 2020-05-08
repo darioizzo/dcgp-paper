@@ -45,11 +45,13 @@ defines entirely the value of the terminal nodes and thus the computer program.
 In `dcgp` the CGP representations are all derived from the basis class ```dcgp::expression<T>``` which is templated as to allow the 
 program to be computed on different types. This structure allows, on one hand, to use forward automated differentiation and thus obtain the differential information on the program output easily by using `T` as a generalized dual number type, and on the other hand to derive from this base class to easily offer different types of CGP. In `dcgp` the classes ```dcgp::expression_weighted<T>``` and ```dcgp::expression_ann``` are offering two of such different CGP representations. The first one adds a weight to each node connection and thus creates a program rich in floating point constant to be learned, while the second one also modifies slighlty the definition of each node as to add a bias too, thus making it possible to obtain a representation where generic artificial neural networks can be represented. Since forwrd mode automated differentiation would be unefficient for ANN training, ```dcgp::expression_ann``` can only operate on the type ```double``` and its weights and biases are learned using a backward mode automated differentiation (back propagation) implemented in the class.
 
-All computer programs can be *mutated* calling the corresponding methods og the ```dcgp::expression<T>``` class.
+All computer programs can be *mutated* calling the corresponding methods of the ```dcgp::expression<T>``` class.
 
 # C++ and Python APIs
 
-A typical use of the package, would look like:
+In developing and maintaining `dcgp` and `dcgpy` we make sure to maintain two separate APIs that are as close as possible
+within the limits of the very different languages capabailities of Python and C++.
+In Python a typical initial of the package, would look like:
 ```python
 import dcgpy
 ks = dcgpy.kernel_set_double(["sum", "diff", "div", "mul"])
@@ -57,14 +59,29 @@ ex = dcgpy.expression_double(inputs = 1, outputs = 1, rows = 1,
                 cols = 6, levels_back = 6, arity  = 2, kernels = ks())
 print("Numerical output: ", ex([1.2]))
 print("Symbolic output: ", ex(["x"]))
+ex.mutate_active(2)
+print("Numerical output: ", ex([1.2]))
+print("Symbolic output: ", ex(["x"]))
+```
+and produce the output:
+
+```bash
+Numerical output:  [1.7]
+Symbolic output:  ['((x/(x+x))+x)']
+Numerical output:  [1.68]
+Symbolic output:  ['((x*(x+x))-x)']
+
 
 ```
-
+while in C++ the same would be achieved by: 
 ```c++
 using namespace dcgp;
 int main() {
     kernel_set<double> ks({"sum", "diff", "div", "mul"});
     expression<double> ex(1u, 1u, 1u, 6u, 6u, 2u, ks());
+    std::cout << "Numerical output: ", ex({1.2})) << "\n";
+    std::cout << "Symbolic output: ", ex({"x"})) << "\n";
+    ex.mutate_active(2);
     std::cout << "Numerical output: ", ex({1.2})) << "\n";
     std::cout << "Symbolic output: ", ex({"x"})) << "\n";
 ```
