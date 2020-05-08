@@ -34,11 +34,11 @@ In this work we introduce the C++ library **dcgp** exposed in the Python package
 # Methods 
 
 In **dcgp** computer programs are encoded using the Cartesia Genetic Programming (CGP) encoding [@miller:2011], that is an acyclic graph
-representation of the program. A Cartesian genetic program, in its original form, is depicted in Figure \ref{fig:cgp}, is defined by the number of inputs $n$, the number of outputs $m$, the number of rows $r$, the number of columns $c$, the levels-back $l$, the arity $a$ of its kernels (non-linearities) and the set of possible operations, or *kernels*. With reference to the picture, each of the $n + rc$ nodes in a CGP is thus assigned a unique id and the vector of integers:
+representation of the program. A Cartesian genetic program, in its original form, is depicted in \autoref{fig:cgp}, and is defined by the number of inputs $n$, the number of outputs $m$, the number of rows $r$, the number of columns $c$, the levels-back $l$, the arity $a$ of its kernels (non-linearities) and the set of possible operations, or *kernels*. With reference to \autoref{fig:cgp}, each of the $n + rc$ nodes in a CGP is assigned a unique id. The vector of integers:
 $$
 \mathbf x_I = [F_0, C_{0,0}, C_{0,1}, ...,  C_{0, a}, F_1, C_{1,0}, ....., O_1, O_2, ..., O_m]
 $$
-defines entirely the value of the terminal nodes.
+defines entirely the value of the terminal nodes and thus the computer program.
 
 ![A classical CGP.\label{fig:cgp}](cgp.png)
 
