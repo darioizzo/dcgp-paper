@@ -42,27 +42,30 @@ defines entirely the value of the terminal nodes and thus the computer program.
 
 ![A classical CGP.\label{fig:cgp}](cgp.png)
 
-In `dcgp` the CGP representations are all derived from a base templated class `dcgp::expression<T>`. The use of the
+In `dcgp` the CGP representations of programs are all derived from a base templated class `dcgp::expression<T>`. The use of the
 templated parameter `T` allows to compute, using different types, the nodes of the acyclic graph defining the computer program, and thus its outputs. In particular, the use of **generalized dual numbers**, implemented in the library `audi` [@audi:2020], are enabled and 
 can be used to obtain the derivatives of the program outputs with respect to parameters present in its encoding. **Generalized dual numbers** 
 implement the algebra of truncated Taylor polynomials and act, in this context, as a high order, forward mode, automated differentiation method.
 
 The two classes `dcgp::expression_weighted<T>` and `dcgp::expression_ann` derive from the base class `dcgp::expression<T>` and offer
-new, extended, kinds of CGP representations. `dcgp::expression_weighted<T>` adds a weight to each node connection and thus creates a program rich in floating point constants to be learned. `dcgp::expression_ann` adds also a bias, thus making it possible to represent generic artificial neural networks. Since forward mode automated differentiation is highly unefficient whenever a high number of parameters are to be learned (a typical situation when training ANN weights and biases), ```dcgp::expression_ann``` is only allowed to operate on the type ```double```, but its weights and biases can be learned using backward mode automated differentiation (back propagation) and a stochastic gradient descent implemented specifically for the class.
+new, extended, kinds of CGP representations. `dcgp::expression_weighted<T>` adds a weight to each node connection and thus creates a program rich in floating point constants to be learned. `dcgp::expression_ann` adds also a bias, thus making it possible to represent generic artificial neural networks. Since forward mode automated differentiation is highly unefficient whenever a high number of parameters are to be learned (a typical situation when training ANN weights and biases), ```dcgp::expression_ann``` is only allowed to operate on the type ```double```. Its weights and biases can be learned using backward mode automated differentiation (back propagation) and a stochastic gradient descent algorithm implemented specifically for the class.
 
-All computer programs represented by a form of CGP can be *mutated* calling the corresponding methods of the ```dcgp::expression<T>``` base class, and thus evolved. Mutations can be chosen selectively to affect the *kernels*, the connections or the output nodes. The different 
-consequences of such mutations are visualized, in the case of a `dcgp::expression_ann`, in \autoref{fig:ann_mut}.
+All computer programs represented in `dcgp` can be *mutated* via the corresponding methods of the ```dcgp::expression<T>``` base class, and thus evolved. Mutations can be chosen selectively to affect only specific part of the chromosome, e.g. the *kernels* type, the connections or the output nodes. The different consequences of such mutations are visualized, in the case of a `dcgp::expression_ann`, in \autoref{fig:ann_mut}.
 
 ![Effects of mutations on a dCGPANN.\label{fig:ann_mut}](ann_mut.png)
 
 In the case of using a `dcgp::expression<T>` for a symbolic regression task, `dcgp` and `dcgpy` include 
-several evolutionary startegies, memetic and multiobjective, as well as a dedicated `dcgp::symbolic_regression` class
+several evolutionary startegies, **memetic** and **multiobjective**, as well as a dedicated `dcgp::symbolic_regression` class
 that represent such tasks as an optimization problems.
 
 # Notes on efficiency (and parallel strategies implemented)
 
-The efficiency of a Genetic Programming code is measured in its ability to evolve in a short time
-good solutions
+The process of evolving some CGP can be lengthy and, being subject to a degree of randomness, is typically repeated a few times 
+to peek at the diversity of possible evolved solutions. As a consequence, CPU efficiency is an enabler to build a successful learning pipeline. In `dcgp` there are several parallelization levels that can be exploited for this purpose. To start with, the program loss with respect to its expected output, can be parallelized when computed on multiple points. A second layer of parallelization is offered by `audi` [@audi:2020] when **generalized dual numbers** are employed. In this case, the underlying truncated Taylor polynomial algebra makes use of fine grained parallelization. A third layer is also present in the non **memetic** optimization algorithms that can evaluate the fitness of the various individuals in parallel using a batch fitness evaluator. All the resulting nested parallelism is dealt with using the threading building blocks library.
+In the Python version `dcgpy` things are more complicated as multi-threading is not permitted and the multi-process parallelization paradigm
+is highly unefficient for fine grained parallelization. As a consequence, most of the implemented parallelization are unavailable. 
+The use of coarse-grained parallelization pardaigms such as the island model for evolutionary algorithms is thus suggested to achieve
+decent computational times.
 
 
 # C++ and Python APIs
@@ -106,7 +109,8 @@ int main() {
     std::cout << "Symbolic output: ", ex({"x"})) << "\n";
 ```
 
-
 # Acknowledgments
+We acknowledge the important support of Luca Guj and Dow Corporation during the development of the 
+symbolic regression API and documentation.
 
 # References
