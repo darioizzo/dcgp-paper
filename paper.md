@@ -43,7 +43,7 @@ defines entirely the value of the terminal nodes and thus the computer program.
 ![A classical CGP.\label{fig:cgp}](cgp.png)
 
 In `dcgp` the CGP representations are all derived from the basis class ```dcgp::expression<T>``` which is templated as to allow the 
-program to be computed on different types. 
+program to be computed on different types. This structure allows, on one hand, to use forward automated differentiation and thus obtain the differential information on the program output easily, and on the other hand to derive from this base class and easily offer different types of CGP. In `dcgp` the classes ```dcgp::expression_weighted<T>``` and ```dcgp::expression_ann``` are offering two of such new CGP representations. The first one adds weights to each node connection and thus creates a program rich in floating point constant to be learned, while the second one modifies slighlty the definition of each node as to add a bias too, thus making it possible to obtain a representation where generic artificial neural networks can be represented.
 
 
 # Examples
