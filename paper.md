@@ -43,8 +43,8 @@ defines entirely the value of the terminal nodes and thus the computer program.
 ![A classical CGP.\label{fig:cgp}](cgp.png)
 
 In `dcgp` the CGP representations are all derived from the basis templated class `dcgp::expression<T>`. The use of the
-templated parameter `T` allows to compute along the acyclic graph defining the computer program using different types.
-In particular, the use of generalized dual numbers, as implemented in the library `audi` [@audi:2018], allow to obtain
+templated parameter `T` allows to compute along the acyclic graph that defines the computer program using different types.
+In particular, the use of generalized dual numbers, as implemented in the library `audi` [@audi:2020], allow to obtain
 derivatives of the program outputs with respect to parameters present in the program encoding by 
 implementing the algebra of truncated Taylor polynomials (essentially a high order, forward mode, automated differentiation method).
 
