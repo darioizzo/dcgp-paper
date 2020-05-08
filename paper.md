@@ -34,7 +34,7 @@ In this work we introduce the C++ library `dcgp` exposed in the Python package `
 # Methods 
 
 In `dcgp` computer programs are encoded using the Cartesian Genetic Programming (CGP) encoding [@miller:2011], that is an acyclic graph
-representation of the program. A Cartesian genetic program, in its original form, is depicted in \autoref{fig:cgp}, and is defined by the number of inputs $n$, the number of outputs $m$, the number of rows $r$, the number of columns $c$, the levels-back $l$, the arity $a$ of its kernels (non-linearities) and the set of possible operations, or *kernels*. With reference to \autoref{fig:cgp}, each of the $n + rc$ nodes in a CGP is assigned a unique id. The vector of integers:
+representation of the program. A Cartesian genetic program, in its original form, is depicted in \autoref{fig:cgp}, and is defined by the number of inputs $n$, the number of outputs $m$, the number of rows $r$, the number of columns $c$, the levels-back $l$, the arity $a$ of its functional units (*kernels*) and the set of possible *kernels*. With reference to \autoref{fig:cgp}, each of the $n + rc$ nodes in a CGP is assigned a unique id. The vector of integers:
 $$
 \mathbf x_I = [F_0, C_{0,0}, C_{0,1}, ...,  C_{0, a}, F_1, C_{1,0}, ....., O_1, O_2, ..., O_m]
 $$
@@ -43,7 +43,7 @@ defines entirely the value of the terminal nodes and thus the computer program.
 ![A classical CGP.\label{fig:cgp}](cgp.png)
 
 In `dcgp` the CGP representations are all derived from the basis templated class `dcgp::expression<T>`. The use of the
-templated parameter `T` allows to compute along the acyclic graph that defines the computer program using different types.
+templated parameter `T` allows to compute using different types the nodes of the acyclic graph defining the computer program.
 In particular, the use of generalized dual numbers, as implemented in the library `audi` [@audi:2020], allow to obtain
 derivatives of the program outputs with respect to parameters present in the program encoding by 
 implementing the algebra of truncated Taylor polynomials (essentially a high order, forward mode, automated differentiation method).
@@ -53,6 +53,9 @@ new, extended, kinds of CGP representations. `dcgp::expression_weighted<T>` adds
 
 All computer programs represented by a form of CGP can be *mutated* calling the corresponding methods of the ```dcgp::expression<T>``` base class, and thus evolved. In the case of use of a `dcgp::expression<T>` in a symbolic regression task, several evolutionary startegies,
 memetic and multiobjective, are provided in the library.
+
+![A classical CGP.\label{fig:ann_mut}](ann_mut.png)
+
 
 # Notes on efficiency (and parallel strategies implemented)
 
