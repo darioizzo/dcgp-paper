@@ -55,10 +55,10 @@ All computer programs represented in `dcgp` can be *mutated* via the correspondi
 ![Effects of mutations on a dCGPANN.\label{fig:ann_mut}](ann_mut.png)
 
 In the case of using a `dcgp::expression<T>` for a symbolic regression task, `dcgp` and `dcgpy` include 
-several evolutionary startegies, **memetic** and **multiobjective**, as well as a dedicated `dcgp::symbolic_regression` class
-that represent such tasks as an optimization problems.
+several evolutionary startegies [@schwefel:1993], **memetic** and **multiobjective**, as well as a dedicated
+`dcgp::symbolic_regression` class that represents such problems as an optimization problems.
 
-# Notes on efficiency (and parallel strategies implemented)
+# Notes on efficiency
 
 The process of evolving some CGP can be lengthy and, being subject to a degree of randomness, is typically repeated a few times 
 to peek at the diversity of possible evolved solutions. As a consequence, CPU efficiency is an enabler to build a successful learning pipeline. In `dcgp` there are several parallelization levels that can be exploited for this purpose. To start with, the program loss with respect to its expected output, can be parallelized when computed on multiple points. A second layer of parallelization is offered by `audi` [@audi:2020] when **generalized dual numbers** are employed. In this case, the underlying truncated Taylor polynomial algebra makes use of fine grained parallelization. A third layer is also present in the non **memetic** optimization algorithms shipped with `dcgp` as they can evaluate the fitness of the various individuals in parallel using a batch fitness evaluator. All the resulting nested parallelism is dealt with using the threading building blocks library.
