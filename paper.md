@@ -33,7 +33,7 @@ In this work we introduce the C++ library `dcgp` exposed in the Python package `
 
 # Methods 
 
-In `dcgp` computer programs are encoded using the Cartesia Genetic Programming (CGP) encoding [@miller:2011], that is an acyclic graph
+In `dcgp` computer programs are encoded using the Cartesian Genetic Programming (CGP) encoding [@miller:2011], that is an acyclic graph
 representation of the program. A Cartesian genetic program, in its original form, is depicted in \autoref{fig:cgp}, and is defined by the number of inputs $n$, the number of outputs $m$, the number of rows $r$, the number of columns $c$, the levels-back $l$, the arity $a$ of its kernels (non-linearities) and the set of possible operations, or *kernels*. With reference to \autoref{fig:cgp}, each of the $n + rc$ nodes in a CGP is assigned a unique id. The vector of integers:
 $$
 \mathbf x_I = [F_0, C_{0,0}, C_{0,1}, ...,  C_{0, a}, F_1, C_{1,0}, ....., O_1, O_2, ..., O_m]
@@ -45,9 +45,39 @@ defines entirely the value of the terminal nodes and thus the computer program.
 In `dcgp` the CGP representations are all derived from the basis class ```dcgp::expression<T>``` which is templated as to allow the 
 program to be computed on different types. This structure allows, on one hand, to use forward automated differentiation and thus obtain the differential information on the program output easily by using `T` as a generalized dual number type, and on the other hand to derive from this base class to easily offer different types of CGP. In `dcgp` the classes ```dcgp::expression_weighted<T>``` and ```dcgp::expression_ann``` are offering two of such different CGP representations. The first one adds a weight to each node connection and thus creates a program rich in floating point constant to be learned, while the second one also modifies slighlty the definition of each node as to add a bias too, thus making it possible to obtain a representation where generic artificial neural networks can be represented. Since forwrd mode automated differentiation would be unefficient for ANN training, ```dcgp::expression_ann``` can only operate on the type ```double``` and its weights and biases are learned using a backward mode automated differentiation (back propagation) implemented in the class.
 
+All computer programs can be *mutated* calling the corresponding methods og the ```dcgp::expression<T>``` class.
 
 # Examples
 
+A typical use of the package (we will now refer to the Python syntax, which is mimicking the C++ one as close as possible), wuld look like:
+```python
+import dcgpy
+# 1- Instantiate a random expression using the 4 basic arithmetic operations
+ks = kernel_set(["sum", "diff", "div", "mul"])
+ex = expression(inputs = 1, outputs = 1, rows = 1, cols = 6, levels_back = 6, kernels = ks())
+
+
+# 2 - Define the symbol set to be used in visualizing the expression
+# (in our case, 1 input variable named "x") and visualize the expressionin_sym = ["x"]
+print("Expression:", ex(in_sym)[0])
+
+# 3 - Print the simplified expression
+print("Simplified expression:", ex.simplify(in_sym))
+
+# 4 - Visualize the dCGP graph
+ex.visualize(in_sym)
+
+# 5 - Define a gdual number of value 1.2 and truncation order 2
+x = gdual(1.2, "x", 2)
+
+# 6 - Compute the output of the expression and its second derivative in x = 1.2 and print
+print("Expression in x=1.2:", ex([x])[0])
+print("Second derivative:", ex([x])[0].get_derivative([2]))
+
+# 5 - Mutate the expression with 2 random mutations of active genes and print
+ex.mutate_active(2)
+print("Mutated expression:", ex(in_sym)[0])
+```
 ## Symbolic Regression
 
 ## Artificial Neural Networks
