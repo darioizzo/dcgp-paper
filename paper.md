@@ -53,10 +53,14 @@ the first one adds a weight to each node connection and thus creates a program r
 
 All computer programs can be *mutated* calling the corresponding methods of the ```dcgp::expression<T>``` class.
 
+# Parallelization schemes
+
 # C++ and Python APIs
 
-In developing and maintaining `dcgp` and `dcgpy` we make sure to maintain two separate APIs that are as close as possible
-within the limits of the very different languages capabilities of Python and C++.
+Two separate APIs are maintained for the C++ and Python version of the code. While the APIs are
+designed to be as close as possible, and to offer a similar experience, there are inevitable differences
+stemming from the very different capabilities of the languages (to mention one, think about the
+lack of an equivalent to C++ templates in Python).
 
 In Python a typical initial use of the `dcgpy` package, would look like:
 ```python
