@@ -29,11 +29,11 @@ differential information of the program outputs as obtained using automated diff
 
 The evolution of a **differentiable genetic program** can be supported by using the information on the derivatives of the program outputs with respect to chosen parameters, enabling in GP the equivalent of back-propagation in Artificial Neural Networks (ANN). The fitness of a program can thus be defined in terms of the derivatives, allowing to go beyond symbolic regression tasks and, for example, to solve differential equations, learn differential models, capture conserved quantities in dynamical systems, search for Lyapunov functions in controlled systems, etc..
 
-In this work we introduce the C++ library **dcgp** exposed in the Python package **dcgpy**, a tool that allows research into the applications enabled by **differentiable genetic programming**.
+In this work we introduce the C++ library `dcgp` exposed in the Python package `dcgpy`, a tool that allows research into the applications enabled by **differentiable genetic programming**.
 
 # Methods 
 
-In **dcgp** computer programs are encoded using the Cartesia Genetic Programming (CGP) encoding [@miller:2011], that is an acyclic graph
+In `dcgp` computer programs are encoded using the Cartesia Genetic Programming (CGP) encoding [@miller:2011], that is an acyclic graph
 representation of the program. A Cartesian genetic program, in its original form, is depicted in \autoref{fig:cgp}, and is defined by the number of inputs $n$, the number of outputs $m$, the number of rows $r$, the number of columns $c$, the levels-back $l$, the arity $a$ of its kernels (non-linearities) and the set of possible operations, or *kernels*. With reference to \autoref{fig:cgp}, each of the $n + rc$ nodes in a CGP is assigned a unique id. The vector of integers:
 $$
 \mathbf x_I = [F_0, C_{0,0}, C_{0,1}, ...,  C_{0, a}, F_1, C_{1,0}, ....., O_1, O_2, ..., O_m]
@@ -41,6 +41,9 @@ $$
 defines entirely the value of the terminal nodes and thus the computer program.
 
 ![A classical CGP.\label{fig:cgp}](cgp.png)
+
+In `dcgp` the CGP representations are all derived from the basis class ```dcgp::expression<T>``` which is templated as to allow the 
+program to be computed on different types. 
 
 
 # Examples
