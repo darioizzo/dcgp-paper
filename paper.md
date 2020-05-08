@@ -49,34 +49,12 @@ All computer programs can be *mutated* calling the corresponding methods og the 
 
 # Examples
 
-A typical use of the package (we will now refer to the Python syntax, which is mimicking the C++ one as close as possible), wuld look like:
+A typical use of the package, would look like:
 ```python
 import dcgpy
-# 1- Instantiate a random expression using the 4 basic arithmetic operations
-ks = kernel_set(["sum", "diff", "div", "mul"])
-ex = expression(inputs = 1, outputs = 1, rows = 1, cols = 6, levels_back = 6, kernels = ks())
-
-
-# 2 - Define the symbol set to be used in visualizing the expression
-# (in our case, 1 input variable named "x") and visualize the expressionin_sym = ["x"]
-print("Expression:", ex(in_sym)[0])
-
-# 3 - Print the simplified expression
-print("Simplified expression:", ex.simplify(in_sym))
-
-# 4 - Visualize the dCGP graph
-ex.visualize(in_sym)
-
-# 5 - Define a gdual number of value 1.2 and truncation order 2
-x = gdual(1.2, "x", 2)
-
-# 6 - Compute the output of the expression and its second derivative in x = 1.2 and print
-print("Expression in x=1.2:", ex([x])[0])
-print("Second derivative:", ex([x])[0].get_derivative([2]))
-
-# 5 - Mutate the expression with 2 random mutations of active genes and print
-ex.mutate_active(2)
-print("Mutated expression:", ex(in_sym)[0])
+ks = dcgpy.kernel_set_double(["sum", "diff", "div", "mul"])
+ex = dcgpy.expression_double(inputs = 1, outputs = 1, rows = 1, 
+                cols = 6, levels_back = 6, kernels = ks())
 ```
 ## Symbolic Regression
 
