@@ -42,16 +42,23 @@ defines entirely the value of the terminal nodes and thus the computer program.
 
 ![A classical CGP.\label{fig:cgp}](cgp.png)
 
-In `dcgp` the CGP representations are all derived from the basis class ```dcgp::expression<T>``` which is templated as to allow the 
-program to be computed on different types. This structure allows, on one hand, to use forward automated differentiation and thus obtain the differential information on the program output easily by using `T` as a generalized dual number type, and on the other hand to derive from this base class to easily offer different types of CGP. In `dcgp` the classes ```dcgp::expression_weighted<T>``` and ```dcgp::expression_ann``` are offering two of such different CGP representations. The first one adds a weight to each node connection and thus creates a program rich in floating point constant to be learned, while the second one also modifies slighlty the definition of each node as to add a bias too, thus making it possible to obtain a representation where generic artificial neural networks can be represented. Since forwrd mode automated differentiation would be unefficient for ANN training, ```dcgp::expression_ann``` can only operate on the type ```double``` and its weights and biases are learned using a backward mode automated differentiation (back propagation) implemented in the class.
+In `dcgp` the CGP representations are all derived from the basis templated class `dcgp::expression<T>`. The use of the
+templated parameter `T` allows to compute along the acyclic graph defining the computer program using different types.
+In particular, the use of generalized dual numbers, as implemented in the library `audi` [@audi:2018], allow to obtain
+derivatives of the program outputs with respect to its inputs or to other parameters present in the program encoding by 
+implementing the algebra of truncated Taylor polynomials (essentailly a high order automated differentiation method).
+
+The two classes `dcgp::expression_weighted<T>` and `dcgp::expression_ann` derive from the base class `dcgp::expression<T>`:
+the first one adds a weight to each node connection and thus creates a program rich in floating point constant to be learned, while the second one modifies the definition of each node of the graph to also add a bias too and thus making it possible to obtain a representation where generic artificial neural networks can be represented. Since forward mode automated differentiation is highly unefficient for ANN training, ```dcgp::expression_ann``` only operates on the type ```double``` and its weights and biases are learned using a backward mode automated differentiation (back propagation) implemented in the class.
 
 All computer programs can be *mutated* calling the corresponding methods of the ```dcgp::expression<T>``` class.
 
 # C++ and Python APIs
 
 In developing and maintaining `dcgp` and `dcgpy` we make sure to maintain two separate APIs that are as close as possible
-within the limits of the very different languages capabailities of Python and C++.
-In Python a typical initial of the package, would look like:
+within the limits of the very different languages capabilities of Python and C++.
+
+In Python a typical initial use of the `dcgpy` package, would look like:
 ```python
 import dcgpy
 ks = dcgpy.kernel_set_double(["sum", "diff", "div", "mul"])
@@ -71,14 +78,13 @@ Symbolic output:  ['((x/(x+x))+x)']
 Numerical output:  [1.68]
 Symbolic output:  ['((x*(x+x))-x)']
 
-
 ```
 while in C++ the same would be achieved by: 
 ```c++
-using namespace dcgp;
+#include <dcgp.hpp>
 int main() {
-    kernel_set<double> ks({"sum", "diff", "div", "mul"});
-    expression<double> ex(1u, 1u, 1u, 6u, 6u, 2u, ks());
+    dcgp::kernel_set<double> ks({"sum", "diff", "div", "mul"});
+    dcgp::expression<double> ex(1u, 1u, 1u, 6u, 6u, 2u, ks());
     std::cout << "Numerical output: ", ex({1.2})) << "\n";
     std::cout << "Symbolic output: ", ex({"x"})) << "\n";
     ex.mutate_active(2);
