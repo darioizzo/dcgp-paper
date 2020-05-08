@@ -46,7 +46,7 @@ In `dcgp` the CGP representations are all derived from the basis templated class
 templated parameter `T` allows to compute along the acyclic graph defining the computer program using different types.
 In particular, the use of generalized dual numbers, as implemented in the library `audi` [@audi:2018], allow to obtain
 derivatives of the program outputs with respect to parameters present in the program encoding by 
-implementing the algebra of truncated Taylor polynomials (essentially a high order automated differentiation method).
+implementing the algebra of truncated Taylor polynomials (essentially a high order, forward mode, automated differentiation method).
 
 The two classes `dcgp::expression_weighted<T>` and `dcgp::expression_ann` derive from the base class `dcgp::expression<T>` and offer
 new, extended, kinds of CGP representations. `dcgp::expression_weighted<T>` adds a weight to each node connection and thus creates a program rich in floating point constants to be learned.  `dcgp::expression_ann` adds also a bias thus making it possible to obtain for the resulting program to represent generic artificial neural networks. Since forward mode automated differentiation is highly unefficient when a high number of parameters are to be learned (a typical situation when training ANN weights and biases), ```dcgp::expression_ann``` only operates on the type ```double``` and its weights and biases are learned using backward mode automated differentiation (back propagation) and a stochastic gradient descent implemented specifically for the class.
