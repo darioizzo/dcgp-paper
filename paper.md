@@ -62,10 +62,9 @@ several novel evolutionary startegies [@schwefel:1993], **memetic** and **multio
 
 The process of evolving a CGP can be lengthy and, being subject to a degree of randomness, is typically repeated a few times 
 to explore the diversity of possible evolved solutions. As a consequence, CPU efficiency is an enabler to build a successful learning pipeline. In the C++ library `dcgp` there are several parallelization levels that can be exploited for this purpose. To start with, the program loss with respect to its expected output, can be parallelized when computed on multiple points. A second layer of parallelization is offered by `audi` [@audi:2020] when **generalized dual numbers** are employed. In this case, the underlying truncated Taylor polynomial algebra makes use of fine grained parallelization. A third layer is also present in the non **memetic** optimization algorithms shipped with `dcgp` as they can evaluate the fitness of the various individuals in parallel using a batch fitness evaluator. All the resulting nested parallelism is dealt with using the ®Intel threading building blocks library.
-In the Python package `dcgpy` things are more complicated as multi-threading is not permitted and the multi-process parallelization paradigm
-is highly unefficient for fine grained parallelization. As a consequence, most of the implemented parallelization are unavailable. 
-The use of coarse-grained parallelization paradigms such as the island model for evolutionary algorithms is thus suggested to achieve
-the best out of `dcgp` computational times.
+In the Python package `dcgpy` things are different as multi-threading is not permitted by the Python interpreter and the multi-process  paradigm is highly unefficient for a fine grained parallelization. As a consequence, most of the mentioned parallelization are unavailable. 
+The use of coarse-grained parallelization paradigms, such as the island model for evolutionary algorithms, is thus suggested to achieve
+the best out of `dcgpy` computational times.
 
 # C++ and Python APIs
 
@@ -108,6 +107,6 @@ int main() {
 
 # Acknowledgments
 We acknowledge the important support of Luca Guj and Dow Corporation during the development of the 
-symbolic regression API and documentation.
+API and documentation.
 
 # References
