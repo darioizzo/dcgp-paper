@@ -27,7 +27,7 @@ Genetic Programming (GP), is a computational technique based on the idea of repr
 genetic programming** [@izzo:2017], was introduced to address exactly this issue by allowing to learn constants in computer programs using the
 differential information of the program outputs as obtained using automated differentiation techniques. 
 
-The evolution of a **differentiable genetic program** can be supported by using the information on the derivatives (at any order) of the program outputs with respect to chosen parameters, enabling in GP the equivalent of back-propagation in Artificial Neural Networks (ANN). The fitness of a program can thus be defined also in terms of its derivatives, allowing to go beyond symbolic regression tasks and, for example, to solve differential equations, learn differential models, capture conserved quantities in dynamical systems, search for Lyapunov functions in controlled systems, etc..
+The evolution of a **differentiable genetic program** can be supported by using the information on the derivatives (at any order) of the program outputs with respect to chosen parameters, enabling in GP the equivalent of back-propagation in Artificial Neural Networks (ANN). The fitness of a program can thus be defined also in terms of its derivatives, allowing to go beyond symbolic regression tasks and, for example, to solve differential equations, learn differential models, capture conserved quantities in dynamical systems, search for Lyapunov functions in controlled systems, etc.
 
 In this work we introduce the C++ library `dcgp` and the Python package `dcgpy`, tools we developed to allow research into the applications enabled by **differentiable genetic programming**. In the rest of this paper, we will refer mainly to `dcgp`, with the understanding that the a corresponding behaviour can always be also obtained in `dcgpy`.
 
@@ -42,7 +42,7 @@ defines entirely the value of the terminal nodes and thus the computer program.
 
 ![A classical CGP.\label{fig:cgp}](cgp.png)
 
-Several *kernels* are already available in `dcgp`, but the user can define his own both in the C++ and in the Python version, allowing for the possibility to consider kernels that are, themselves, genetic programs. 
+Several *kernels* are already available in `dcgp`, but users can define their own both in the C++ and in the Python version, allowing for the possibility to consider kernels that are, themselves, genetic programs.
 
 In `dcgp` the CGP representations of programs are all derived from a base C++ templated class `dcgp::expression<T>`. The use of the
 template parameter `T` allows to compute the nodes of the acyclic graph defining the computer program, and thus its outputs, using different computational types. In particular, the use of **generalized dual numbers**, implemented as a new type in the library `audi` [@audi:2020], are enabled and can be used to obtain the derivatives, at any order, of the program outputs with respect to parameters present in its encoding. **Generalized dual numbers** implement the algebra of truncated Taylor polynomials and act, in this context, as a high order, forward mode, automated differentiation method.
